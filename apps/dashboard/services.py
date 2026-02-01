@@ -38,6 +38,28 @@ def get_orders(shop_id):
 
 
 
+def get_shop(shop_id):
+    with closing(connection.cursor()) as cursor:
+        cursor.execute("""SELECT * FROM shops_app_shop WHERE id = %s""", [shop_id])
+        shop = dictfetchone(cursor)
+        return shop
+
+
+def get_product(product_id):
+    with closing(connection.cursor()) as cursor:
+        cursor.execute("""SELECT * FROM shops_app_product WHERE id = %s""", [product_id])
+        product = dictfetchone(cursor)
+        return product
+
+
+def get_order(order_id):
+    with closing(connection.cursor()) as cursor:
+        cursor.execute("""SELECT * FROM shops_app_order WHERE id = %s""", [order_id])
+        order = dictfetchone(cursor)
+        return order
+
+
+
 
 
 
