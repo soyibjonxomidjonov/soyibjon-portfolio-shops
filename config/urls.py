@@ -23,6 +23,7 @@ from config.settings import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('dashboard/', include('apps.dashboard.urls')),
     path('', include('apps.shops_app.urls')),
 ]
 
