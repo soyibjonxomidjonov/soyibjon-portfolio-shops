@@ -31,7 +31,7 @@ def get_products(shop_id):
 
 def get_orders(shop_id):
     with closing(connection.cursor()) as cursor:
-        cursor.execute("""SELECT * FROM shops_app_order WHERE shop_id = %s""", [shop_id])
+        cursor.execute("""SELECT * FROM shops_app_order WHERE shop_id = %s ORDER BY id DESC""", [shop_id])
         orders = dictfetchall(cursor)
         return orders
 

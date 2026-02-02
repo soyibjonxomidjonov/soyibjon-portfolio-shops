@@ -9,7 +9,7 @@ class Order(models.Model):
     items_json = models.JSONField(default=list)
     total_price = models.IntegerField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, default='yangi')
+    status = models.CharField(max_length=20, default='yangi', db_index=True)
 
     def __str__(self):
         return self.first_name

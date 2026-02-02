@@ -1,10 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "dashboard/base.html" %}
 
-</body>
-</html>
+{% block title %}Mahsulotlarni boshqarish | Cyber Shop{% endblock %}
+
+{% block content %}
+<div class="products-wrapper" style="padding: 20px;">
+
+    {# 1-QISM: AGAR DO'KON TANLANMAGAN BO'LSA #}
+    {% if not current_shop_products %}
+        <div style="margin-bottom: 40px;">
+            <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 15px;">
+                <span style="font-size: 30px;">🏪</span> Do'konni tanlang
+            </h1>
+            <p style="color: #8b949e; margin-top: 8px; font-size: 14px;">Mahsulotlarni ko'rish uchun avval do'konni tanlashingiz kerak</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
+            {% for shop in shops %}
+            <a href="{% url 'products_shop' shop.id %}" style="text-decoration: none; color: inherit;">
+                <div class="cyber-card" style="background: #161b22; padding: 35px 25px; border-radius: 20px; border: 1px solid #30363d; text-align: center; transition: all 0.3s ease;">
+                    <div style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0, 209, 255, 0.2));">🏬</div>
+                    <h4 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 700;">{{ shop.name }}</h4>
+                    <div style="margin-top: 15px; color: #00d1ff; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                        Mahsulotlarni ko'rish <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+                <p style="color: #8b949e;">Sizda hali do'konlar mavjud emas.</p>
+            {% endfor %}
+        </div>
+
+    {# 2-QISM: AGAR DO'KON TANLANGAN BO'LSA #}
+    {% else %}
+        <div style="margin-bottom: 35px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <a href="{% url 'products' %}" style="color: #00d1ff; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    <i class="fas fa-chevron-left"></i> Boshqa do'konni tanlash
+                </a>
+                <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin-top: 15px; margin-bottom: 0;">
+                    📦 <span style="color: #00d1ff;">{{ current_shop_products.0.shop.name }}</span> mahsulotlari
+                </h1>
+            </div>
+
+            <a href="#" style="text-decoration: none; background: #00ffaa; color: #0a0b10; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 255, 170, 0.2); text-transform: uppercase; letter-spacing: 0.5px;"
+               onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(0, 255, 170, 0.4)';"
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 15px rgba(0, 255, 170, 0.2)';">
+                <i class="fas fa-plus-circle" style="font-size: 16px;"></i> Mahsulot qo'shish
+            </a>
+        </div>
+
+        <div style="background: #161b22; border-radius: 20px; border: 1px solid #30363d; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: rgba(48, 54, 61, 0.5); border-bottom: 1px solid #30363d;">
+                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Mahsulot</th>
+                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Narxi</th>
+                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Soni</th>
+                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prod in current_shop_products %}
+                    <tr class="table-row" style="border-bottom: 1px solid #30363d; transition: 0.2s;">
+                        <td style="padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                {% if prod.image %}
+                                    <img src="{{ prod.image.url }}" style="width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 1px solid #30363d;">
+                                {% else %}
+                                    <div style="width: 45px; height: 45px; background: #0d1117; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #8b949e; border: 1px solid #30363d;">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <div style="color: #ffffff; font-weight: 600; font-size: 15px;">{{ prod.name }}</div>
+                                    <div style="color: #8b949e; font-size: 12px; margin-top: 2px; font-family: monospace;">ID: #{{ prod.id }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding: 20px;">
+                            <span style="color: #00ffaa; font-weight: 700; font-size: 15px;">{{ prod.price }} so'm</span>
+                        </td>
+                        <td style="padding: 20px;">
+                            <span style="color: #ffffff; font-weight: 500;">{{ prod.stock }} {{ prod.unity }}</span>
+                        </td>
+                        <td style="padding: 20px; text-align: right;">
+                            <div style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
+                                <a href="{% url 'product_id' shop_id prod.id %}" class="edit-link">
+                                    <i class="fas fa-edit"></i> Tahrirlash
+                                </a>
+                                <a href="#" class="delete-link" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .cyber-card:hover {
+        border-color: #00d1ff !important;
+        transform: translateY(-8px);
+        box-shadow: 0 12px 25px rgba(0, 209, 255, 0.15);
+    }
+    .table-row:hover { background: rgba(255, 255, 255, 0.03); }
+    .edit-link {
+        color: #00d1ff; text-decoration: none; background: rgba(0, 209, 255, 0.1);
+        padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
+        transition: 0.3s; border: 1px solid rgba(0, 209, 255, 0.3);
+        display: inline-flex; align-items: center; gap: 8px;
+    }
+    .edit-link:hover { background: #00d1ff; color: #0a0b10; box-shadow: 0 0 20px rgba(0, 209, 255, 0.4); }
+    .delete-link {
+        color: #ff4d4d; background: rgba(255, 77, 77, 0.1); padding: 8px 12px;
+        border-radius: 8px; text-decoration: none; font-size: 14px; transition: 0.3s;
+        border: 1px solid rgba(255, 77, 77, 0.2); display: inline-flex; align-items: center;
+    }
+    .delete-link:hover { background: #ff4d4d; color: white; box-shadow: 0 0 15px rgba(255, 77, 77, 0.4); }
+</style>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from apps.shops_app.services.decorators import login_decorator
-from apps.dashboard.services import *
+from apps.dashboard.services import get_shops, get_products, get_orders
 
 
 @login_decorator
@@ -16,14 +16,3 @@ def dashboard_main(request, shop_id=None):
     ctx['current_shop'] = next((s for s in shops if s['id'] == shop_id), None)
     return render(request, "dashboard/main/main.html", ctx)
 
-
-
-@login_decorator
-def dashboard_shops(request, shop_id=None):
-    shops = get_shops(request.my_user.id)
-    ctx = {}
-    if shop_id:
-        choose_shop = get_shop(shop_id)
-        ctx['current_shop'] = choose_shop
-    ctx['shops'] = shops
-    return render(request, "dashboard/shops/list.html", ctx)

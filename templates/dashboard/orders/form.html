@@ -1,0 +1,61 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+<div style="padding: 20px; color: white;">
+    <a href="{% url 'orders_shop' choose_order.shop.id %}" style="color: #00d1ff; text-decoration: none; font-size: 14px;">
+        <i class="fas fa-arrow-left"></i> Buyurtmalar ro'yxatiga qaytish
+    </a>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 30px;">
+        
+        {# STATUS VA MIJOZ #}
+        <div style="background: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d;">
+            <h3 style="color: #00d1ff; margin-bottom: 25px;">Buyurtma #{{ choose_order.id }}</h3>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <label style="color: #8b949e; font-size: 12px; font-weight: 700;">BUYURTMA STATUSI</label>
+                <select name="status" style="width: 100%; background: #0d1117; color: white; border: 1px solid #30363d; padding: 15px; border-radius: 12px; margin-top: 10px; margin-bottom: 25px;">
+                    <option value="yangi" {% if choose_order.status == 'yangi' %}selected{% endif %}>Yangi</option>
+                    <option value="tayyorlanmoqda" {% if choose_order.status == 'tayyorlanmoqda' %}selected{% endif %}>Tayyorlanmoqda</option>
+                    <option value="yakunlangan" {% if choose_order.status == 'yakunlangan' %}selected{% endif %}>Yakunlangan</option>
+                </select>
+
+                <div style="background: #0d1117; padding: 20px; border-radius: 15px; margin-bottom: 25px;">
+                    <div style="color: #8b949e; font-size: 11px;">MIJOZ:</div>
+                    <div style="font-size: 18px; font-weight: 700; margin: 5px 0;">{{ choose_order.first_name }}</div>
+                    <div style="color: #00ffaa;">{{ choose_order.phone_number }}</div>
+                    <div style="margin-top: 10px; font-size: 13px; color: #8b949e;">📍 {{ choose_order.address }}</div>
+                </div>
+
+                <button type="submit" style="width: 100%; background: #00d1ff; color: #0a0b10; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;">
+                    O'ZGARIŞLARNI SAQLASH
+                </button>
+            </form>
+        </div>
+
+        {# MAHSULOTLAR RO'YXATI (JSON) #}
+        <div style="background: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d;">
+            <h4 style="margin-bottom: 20px;">Savatchadagi mahsulotlar</h4>
+            <table style="width: 100%;">
+                <tr style="color: #8b949e; font-size: 11px; border-bottom: 1px solid #30363d;">
+                    <th style="padding: 10px 0; text-align: left;">MAHSULOT</th>
+                    <th style="padding: 10px 0; text-align: center;">SONI</th>
+                    <th style="padding: 10px 0; text-align: right;">JAMI</th>
+                </tr>
+                {% for item in choose_order.items_json %}
+                <tr style="border-bottom: 1px solid #21262d;">
+                    <td style="padding: 15px 0; font-weight: 600;">{{ item.product_name }}</td>
+                    <td style="padding: 15px 0; text-align: center;">{{ item.quantity }} {{ item.unity }}</td>
+                    <td style="padding: 15px 0; text-align: right; color: #00ffaa;">{{ item.item_total }} so'm</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div style="margin-top: 30px; text-align: right; border-top: 2px solid #30363d; padding-top: 20px;">
+                <span style="color: #8b949e;">Umumiy summa:</span>
+                <div style="font-size: 24px; font-weight: 800; color: #00d1ff;">{{ choose_order.total_price }} so'm</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
