@@ -9,7 +9,9 @@ urlpatterns = [
 
 #     Shops page settings urls
     path('shops/', dashboard_shops, name='shops'),
-    path('shops/create', dashboard_shops, name='shops'),
+    path('shops/create', dashboard_shop_create, name='shop_create'),
+    path('shops/delete/<int:shop_id>', dashboard_shop_delete, name='shop_delete'),
+    path('shops/edit/<int:shop_id>', dashboard_shop_edit, name='shop_edit'),
     path('shops/<int:shop_id>/', dashboard_shop, name='shops_id'),
 
 #     Products page settings urls

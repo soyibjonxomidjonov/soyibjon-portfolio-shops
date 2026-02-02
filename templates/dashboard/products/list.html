@@ -5,8 +5,11 @@
 {% block content %}
 <div class="products-wrapper" style="padding: 20px;">
 
-    {# 1-QISM: AGAR DO'KON TANLANMAGAN BO'LSA #}
-    {% if not current_shop_products %}
+    {# URL-dan shop_id ni ushlab olamiz - Bu view-ga tegmasdan hal qilishning yo'li #}
+    {% with shop_id=request.resolver_match.kwargs.shop_id %}
+
+    {# 1-QISM: AGAR DO'KON TANLANMAGAN BO'LSA (URL-da ID yo'q bo'lsa) #}
+    {% if not shop_id %}
         <div style="margin-bottom: 40px;">
             <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 15px;">
                 <span style="font-size: 30px;">🏪</span> Do'konni tanlang
@@ -38,10 +41,11 @@
                     <i class="fas fa-chevron-left"></i> Boshqa do'konni tanlash
                 </a>
                 <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin-top: 15px; margin-bottom: 0;">
-                    📦 <span style="color: #00d1ff;">{{ current_shop_products.0.shop.name }}</span> mahsulotlari
+                    📦 <span style="color: #00d1ff;">{{ current_shop_products.0.shop.name|default:"Do'kon" }}</span> mahsulotlari
                 </h1>
             </div>
 
+            {# TUGMA HAR DOIM CHIQIB TURADI #}
             <a href="#" style="text-decoration: none; background: #00ffaa; color: #0a0b10; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 255, 170, 0.2); text-transform: uppercase; letter-spacing: 0.5px;"
                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(0, 255, 170, 0.4)';"
                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 15px rgba(0, 255, 170, 0.2)';">
@@ -50,55 +54,64 @@
         </div>
 
         <div style="background: #161b22; border-radius: 20px; border: 1px solid #30363d; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                <thead>
-                    <tr style="background: rgba(48, 54, 61, 0.5); border-bottom: 1px solid #30363d;">
-                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Mahsulot</th>
-                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Narxi</th>
-                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Soni</th>
-                        <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Amallar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for prod in current_shop_products %}
-                    <tr class="table-row" style="border-bottom: 1px solid #30363d; transition: 0.2s;">
-                        <td style="padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                {% if prod.image %}
-                                    <img src="{{ prod.image.url }}" style="width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 1px solid #30363d;">
-                                {% else %}
-                                    <div style="width: 45px; height: 45px; background: #0d1117; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #8b949e; border: 1px solid #30363d;">
-                                        <i class="fas fa-image"></i>
+            {% if current_shop_products %}
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="background: rgba(48, 54, 61, 0.5); border-bottom: 1px solid #30363d;">
+                            <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Mahsulot</th>
+                            <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Narxi</th>
+                            <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;">Soni</th>
+                            <th style="padding: 20px; color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prod in current_shop_products %}
+                        <tr class="table-row" style="border-bottom: 1px solid #30363d; transition: 0.2s;">
+                            <td style="padding: 20px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    {% if prod.image %}
+                                        <img src="{{ prod.image.url }}" style="width: 45px; height: 45px; border-radius: 10px; object-fit: cover; border: 1px solid #30363d;">
+                                    {% else %}
+                                        <div style="width: 45px; height: 45px; background: #0d1117; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #8b949e; border: 1px solid #30363d;">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <div style="color: #ffffff; font-weight: 600; font-size: 15px;">{{ prod.name }}</div>
+                                        <div style="color: #8b949e; font-size: 12px; margin-top: 2px; font-family: monospace;">ID: #{{ prod.id }}</div>
                                     </div>
-                                {% endif %}
-                                <div>
-                                    <div style="color: #ffffff; font-weight: 600; font-size: 15px;">{{ prod.name }}</div>
-                                    <div style="color: #8b949e; font-size: 12px; margin-top: 2px; font-family: monospace;">ID: #{{ prod.id }}</div>
                                 </div>
-                            </div>
-                        </td>
-                        <td style="padding: 20px;">
-                            <span style="color: #00ffaa; font-weight: 700; font-size: 15px;">{{ prod.price }} so'm</span>
-                        </td>
-                        <td style="padding: 20px;">
-                            <span style="color: #ffffff; font-weight: 500;">{{ prod.stock }} {{ prod.unity }}</span>
-                        </td>
-                        <td style="padding: 20px; text-align: right;">
-                            <div style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
-                                <a href="{% url 'product_id' shop_id prod.id %}" class="edit-link">
-                                    <i class="fas fa-edit"></i> Tahrirlash
-                                </a>
-                                <a href="#" class="delete-link" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            </td>
+                            <td style="padding: 20px;">
+                                <span style="color: #00ffaa; font-weight: 700; font-size: 15px;">{{ prod.price }} so'm</span>
+                            </td>
+                            <td style="padding: 20px;">
+                                <span style="color: #ffffff; font-weight: 500;">{{ prod.stock }} {{ prod.unity }}</span>
+                            </td>
+                            <td style="padding: 20px; text-align: right;">
+                                <div style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
+                                    <a href="{% url 'product_id' shop_id prod.id %}" class="edit-link">
+                                        <i class="fas fa-edit"></i> Tahrirlash
+                                    </a>
+                                    <a href="#" class="delete-link" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {# MAHSULOT YO'Q BO'LSA SHU QISM CHIQADI #}
+                <div style="padding: 60px; text-align: center;">
+                    <p style="color: #8b949e; font-size: 16px;">🔍 Ma'lumot topilmadi.</p>
+                </div>
+            {% endif %}
         </div>
     {% endif %}
+
+    {% endwith %}
 </div>
 
 <style>
