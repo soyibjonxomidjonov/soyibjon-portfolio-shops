@@ -2,17 +2,18 @@
 
 {% block content %}
 <div style="padding: 20px; color: white;">
-    <a href="{% url 'orders_shop' choose_order.shop.id %}" style="color: #00d1ff; text-decoration: none; font-size: 14px;">
+    <a href="{% url 'orders_shop' shop_id %}" style="color: #00d1ff; text-decoration: none; font-size: 14px;">
         <i class="fas fa-arrow-left"></i> Buyurtmalar ro'yxatiga qaytish
     </a>
 
     <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; margin-top: 30px;">
-        
+
         {# STATUS VA MIJOZ #}
         <div style="background: #161b22; padding: 30px; border-radius: 20px; border: 1px solid #30363d;">
             <h3 style="color: #00d1ff; margin-bottom: 25px;">Buyurtma #{{ choose_order.id }}</h3>
-            
-            <form method="POST">
+
+            {# FAQAT SHU QATOR O'ZGARDİ: action qo'shildi #}
+            <form method="POST" action="{% url 'order_edit' shop_id choose_order.id %}">
                 {% csrf_token %}
                 <label style="color: #8b949e; font-size: 12px; font-weight: 700;">BUYURTMA STATUSI</label>
                 <select name="status" style="width: 100%; background: #0d1117; color: white; border: 1px solid #30363d; padding: 15px; border-radius: 12px; margin-top: 10px; margin-bottom: 25px;">

@@ -1,20 +1,23 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Tahrirlash: {{ choose_product.name }} | Cyber Shop{% endblock %}
+{% block title %}
+    Mahsulot: {{ product.name }} | Cyber Shop
+{% endblock %}
 
 {% block content %}
 <div class="form-container" style="max-width: 1000px; margin: 0 auto;">
 
     <div style="margin-bottom: 30px;">
-        <a href="{% url 'products_shop' shop.id %}" style="color: #8b949e; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.color='#00d1ff'">
+        <a href="{% url 'products_shop' shop.id %}" style="color: #8b949e; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.color='#00d1ff'" onmouseout="this.style.color='#8b949e'">
             <i class="fas fa-arrow-left"></i> {{ shop.name }} mahsulotlariga qaytish
         </a>
         <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin-top: 15px; display: flex; align-items: center; gap: 15px;">
-            <span style="color: #00d1ff;"><i class="fas fa-edit"></i></span> Mahsulotni tahrirlash
+            <span style="color: #00d1ff;"><i class="fas fa-cube"></i></span>
+            Mahsulotni boshqarish
         </h1>
     </div>
 
-    <form method="POST" enctype="multipart/form-data" style="display: grid; grid-template-columns: 320px 1fr; gap: 30px;">
+    <form method="POST" action="{% url 'product_edit' product.id %}" enctype="multipart/form-data" style="display: grid; grid-template-columns: 320px 1fr; gap: 30px;">
         {% csrf_token %}
 
         <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -22,8 +25,8 @@
                 <p style="color: #8b949e; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 1px;">Mahsulot tasviri</p>
 
                 <div style="position: relative; width: 100%; aspect-ratio: 1/1; background: #0d1117; border-radius: 15px; border: 2px dashed #30363d; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                    {% if choose_product.image %}
-                        <img src="{{ choose_product.image.url }}" id="imgPreview" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" id="imgPreview" style="width: 100%; height: 100%; object-fit: cover;">
                     {% else %}
                         <i class="fas fa-box-open" id="placeholderIcon" style="font-size: 50px; color: #30363d;"></i>
                         <img src="" id="imgPreview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
@@ -32,14 +35,16 @@
 
                 <input type="file" name="image" id="fileInput" style="display: none;" accept="image/*">
                 <label for="fileInput" class="upload-btn">
-                    <i class="fas fa-camera"></i> Rasmni almashtirish
+                    <i class="fas fa-camera"></i> Rasmni o'zgartirish
                 </label>
             </div>
 
             <div class="cyber-card" style="padding: 20px; font-size: 13px; color: #8b949e;">
                 <i class="fas fa-info-circle" style="color: #00d1ff;"></i>
-                Yaratilgan sana: <br>
-                <strong style="color: #fff;">{{ choose_product.created_at|date:"d-m-Y, H:i" }}</strong>
+                ID: <strong style="color: #fff;">#{{ product.id }}</strong><br>
+                Sotuvda: <strong style="color: #fff;">{{ product.stock }} {{ product.unity }}</strong><br>
+                Qo'shilgan vaqti:<br>
+                <strong style="color: #fff;">{{ product.created_at|date:"d.m.Y, H:i" }}</strong>
             </div>
         </div>
 
@@ -47,114 +52,63 @@
             <div class="input-grid">
                 <div class="field-wrapper" style="grid-column: span 2;">
                     <label>Mahsulot nomi</label>
-                    <input type="text" name="name" value="{{ choose_product.name }}" placeholder="Masalan: Gaming Mouse" required>
+                    <input type="text" name="name" value="{{ form.name.value|default:product.name }}" required>
                 </div>
 
                 <div class="field-wrapper">
                     <label>Narxi (so'm)</label>
-                    <input type="number" name="price" value="{{ choose_product.price }}" required>
+                    <input type="number" name="price" value="{{ form.price.value|default:product.price }}" required>
                 </div>
 
                 <div class="field-wrapper">
                     <label>Ombordagi qoldiq</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="number" name="stock" value="{{ choose_product.stock }}" style="flex: 1;" required>
-                        <select name="unity" style="width: 100px;">
-                            <option value="dona" {% if choose_product.unity == 'dona' %}selected{% endif %}>Dona</option>
-                            <option value="kg" {% if choose_product.unity == 'kg' %}selected{% endif %}>Kg</option>
-                            <option value="litr" {% if choose_product.unity == 'litr' %}selected{% endif %}>Litr</option>
+                        <input type="number" name="stock" value="{{ form.stock.value|default:product.stock }}" style="flex: 1;" required>
+                        <select name="unity" style="width: 110px;">
+                            <option value="dona" {% if product.unity == 'dona' %}selected{% endif %}>Dona</option>
+                            <option value="kg" {% if product.unity == 'kg' %}selected{% endif %}>Kg</option>
+                            <option value="litr" {% if product.unity == 'litr' %}selected{% endif %}>Litr</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="field-wrapper" style="grid-column: span 2;">
                     <label>Mahsulot haqida batafsil</label>
-                    <textarea name="description" rows="6" placeholder="Mahsulot xususiyatlarini yozing...">{{ choose_product.description }}</textarea>
+                    <textarea name="description" rows="6">{{ form.description.value|default:product.description }}</textarea>
                 </div>
             </div>
 
             <div style="margin-top: 35px; display: flex; gap: 15px; align-items: center;">
                 <button type="submit" class="submit-btn">
-                    <i class="fas fa-save"></i> Saqlash
+                    <i class="fas fa-save"></i> O'zgarishlarni saqlash
                 </button>
 
-                <a href="#" class="delete-btn" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
-                    <i class="fas fa-trash-alt"></i> O'chirish
+                <a href="{% url 'product_delete' product.id %}" class="delete-btn" title="O'chirish" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
+                    <i class="fas fa-trash-alt"></i>
                 </a>
 
-                <a href="#" class="cancel-btn">
-                    Bekor qilish
-                </a>
+                <a href="{% url 'products_shop' shop.id %}" class="cancel-btn">Bekor qilish</a>
             </div>
         </div>
     </form>
 </div>
 
 <style>
-    /* Umumiy kartochka stili */
-    .cyber-card {
-        background: #161b22;
-        border: 1px solid #30363d;
-        border-radius: 20px;
-    }
-
+    .cyber-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; }
     .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-
-    .field-wrapper label {
-        display: block;
-        color: #8b949e;
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
+    .field-wrapper label { display: block; color: #8b949e; font-size: 12px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
     .field-wrapper input, .field-wrapper textarea, .field-wrapper select {
-        width: 100%;
-        background: #0d1117;
-        border: 1px solid #30363d;
-        border-radius: 12px;
-        padding: 14px 18px;
-        color: #ffffff;
-        font-size: 15px;
-        transition: 0.3s;
+        width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 12px;
+        padding: 14px 18px; color: #ffffff; font-size: 15px; transition: 0.3s;
     }
-
-    .field-wrapper input:focus, .field-wrapper textarea:focus {
-        border-color: #00d1ff;
-        box-shadow: 0 0 15px rgba(0, 209, 255, 0.1);
-        background: #11161d; outline: none;
-    }
-
-    .upload-btn {
-        margin-top: 15px; display: block; background: rgba(48, 54, 61, 0.8);
-        color: #fff; padding: 12px; border-radius: 10px; cursor: pointer;
-        font-size: 13px; font-weight: 600; transition: 0.3s; text-align: center;
-    }
-    .upload-btn:hover { background: #484f58; }
-
-    /* Tugmalar stili */
-    .submit-btn {
-        flex: 2; background: linear-gradient(90deg, #00d1ff, #0072ff);
-        color: white; border: none; padding: 16px; border-radius: 12px;
-        font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s;
-    }
-    .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 209, 255, 0.3); }
-
-    .delete-btn {
-        flex: 1; background: rgba(248, 81, 73, 0.1); color: #f85149;
-        border: 1px solid rgba(248, 81, 73, 0.2); padding: 16px; border-radius: 12px;
-        text-decoration: none; text-align: center; font-weight: 600; transition: 0.3s;
-    }
-    .delete-btn:hover { background: #f85149; color: white; box-shadow: 0 8px 20px rgba(248, 81, 73, 0.3); }
-
-    .cancel-btn {
-        flex: 1; background: transparent; color: #8b949e;
-        border: 1px solid #30363d; padding: 16px; border-radius: 12px;
-        text-decoration: none; text-align: center; font-weight: 600; transition: 0.3s;
-    }
-    .cancel-btn:hover { background: #30363d; color: white; }
+    .field-wrapper input:focus, .field-wrapper textarea:focus { border-color: #00d1ff; outline: none; background: #11161d; box-shadow: 0 0 10px rgba(0, 209, 255, 0.1); }
+    .upload-btn { margin-top: 15px; display: block; background: #21262d; color: #c9d1d9; border: 1px solid #30363d; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; text-align: center; }
+    .upload-btn:hover { background: #30363d; color: #00d1ff; }
+    .submit-btn { flex: 3; background: #00d1ff; color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; }
+    .submit-btn:hover { background: #00b8e6; transform: translateY(-2px); }
+    .delete-btn { width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; background: rgba(248, 81, 73, 0.1); color: #f85149; border: 1px solid #f85149; border-radius: 12px; text-decoration: none; transition: 0.3s; }
+    .delete-btn:hover { background: #f85149; color: #fff; }
+    .cancel-btn { flex: 1.5; background: transparent; color: #8b949e; border: 1px solid #30363d; padding: 16px; border-radius: 12px; text-decoration: none; text-align: center; font-weight: 600; font-size: 14px; }
 </style>
 
 <script>

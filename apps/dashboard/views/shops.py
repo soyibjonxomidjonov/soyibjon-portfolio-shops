@@ -19,6 +19,7 @@ def dashboard_shops(request):
 def dashboard_shop(request, shop_id):
     shop = Shop.objects.get(pk=shop_id)
     ctx = {
+        'model': shop,
         'shop': shop
     }
     return render(request, 'dashboard/shops/form.html', ctx)
@@ -43,7 +44,7 @@ def dashboard_shop_create(request):
 
 @login_decorator
 def dashboard_shop_edit(request, shop_id):
-    model = get_object_or_404(Shop, pk=shop_id, user_id=request.my_user.id)
+    model = get_object_or_404(Shop, pk=shop_id, owner_id=request.my_user.id)
     form = ShopForm(request.POST or None, request.FILES or None, instance=model)
     if request.POST and form.is_valid():
         form.save()

@@ -5,16 +5,13 @@
 {% block content %}
 <div class="products-wrapper" style="padding: 20px;">
 
-    {# URL-dan shop_id ni ushlab olamiz - Bu view-ga tegmasdan hal qilishning yo'li #}
-    {% with shop_id=request.resolver_match.kwargs.shop_id %}
-
-    {# 1-QISM: AGAR DO'KON TANLANMAGAN BO'LSA (URL-da ID yo'q bo'lsa) #}
+    {# 1-QISM: AGAR DO'KON TANLANMAGAN BO'LSA #}
     {% if not shop_id %}
         <div style="margin-bottom: 40px;">
             <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 15px;">
                 <span style="font-size: 30px;">🏪</span> Do'konni tanlang
             </h1>
-            <p style="color: #8b949e; margin-top: 8px; font-size: 14px;">Mahsulotlarni ko'rish uchun avval do'konni tanlashingiz kerak</p>
+            <p style="color: #8b949e; margin-top: 8px; font-size: 14px;">Mahsulotlarni boshqarish uchun avval do'konni tanlashingiz kerak</p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;">
@@ -24,7 +21,7 @@
                     <div style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0, 209, 255, 0.2));">🏬</div>
                     <h4 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 700;">{{ shop.name }}</h4>
                     <div style="margin-top: 15px; color: #00d1ff; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
-                        Mahsulotlarni ko'rish <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+                        Kirish <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
                     </div>
                 </div>
             </a>
@@ -41,12 +38,12 @@
                     <i class="fas fa-chevron-left"></i> Boshqa do'konni tanlash
                 </a>
                 <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin-top: 15px; margin-bottom: 0;">
-                    📦 <span style="color: #00d1ff;">{{ current_shop_products.0.shop.name|default:"Do'kon" }}</span> mahsulotlari
+                    📦 <span style="color: #00d1ff;">{{ current_shop.name }}</span> mahsulotlari
                 </h1>
             </div>
 
-            {# TUGMA HAR DOIM CHIQIB TURADI #}
-            <a href="#" style="text-decoration: none; background: #00ffaa; color: #0a0b10; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 255, 170, 0.2); text-transform: uppercase; letter-spacing: 0.5px;"
+            {# MAHSULOT QO'SHISH TUGMASI - Link to'g'irlandi #}
+            <a href="{% url 'product_create' %}" style="text-decoration: none; background: #00ffaa; color: #0a0b10; padding: 12px 22px; border-radius: 12px; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 10px; transition: 0.3s; box-shadow: 0 0 15px rgba(0, 255, 170, 0.2); text-transform: uppercase; letter-spacing: 0.5px;"
                onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 25px rgba(0, 255, 170, 0.4)';"
                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 0 15px rgba(0, 255, 170, 0.2)';">
                 <i class="fas fa-plus-circle" style="font-size: 16px;"></i> Mahsulot qo'shish
@@ -90,10 +87,12 @@
                             </td>
                             <td style="padding: 20px; text-align: right;">
                                 <div style="display: flex; justify-content: flex-end; gap: 10px; align-items: center;">
-                                    <a href="{% url 'product_id' shop_id prod.id %}" class="edit-link">
+                                    {# TAHRIRLASH LINKI - URL to'g'irlandi #}
+                                    <a href="{% url 'product_edit' prod.id %}" class="edit-link">
                                         <i class="fas fa-edit"></i> Tahrirlash
                                     </a>
-                                    <a href="#" class="delete-link" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
+                                    {# O'CHIRISH LINKI - URL to'g'irlandi #}
+                                    <a href="{% url 'product_delete' prod.id %}" class="delete-link" onclick="return confirm('Haqiqatan ham ushbu mahsulotni o\'chirmoqchimisiz?')">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </div>
@@ -103,23 +102,17 @@
                     </tbody>
                 </table>
             {% else %}
-                {# MAHSULOT YO'Q BO'LSA SHU QISM CHIQADI #}
                 <div style="padding: 60px; text-align: center;">
-                    <p style="color: #8b949e; font-size: 16px;">🔍 Ma'lumot topilmadi.</p>
+                    <p style="color: #8b949e; font-size: 16px;">🔍 Ushbu do'konda hali mahsulotlar yo'q.</p>
                 </div>
             {% endif %}
         </div>
     {% endif %}
 
-    {% endwith %}
 </div>
 
 <style>
-    .cyber-card:hover {
-        border-color: #00d1ff !important;
-        transform: translateY(-8px);
-        box-shadow: 0 12px 25px rgba(0, 209, 255, 0.15);
-    }
+    .cyber-card:hover { border-color: #00d1ff !important; transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0, 209, 255, 0.15); }
     .table-row:hover { background: rgba(255, 255, 255, 0.03); }
     .edit-link {
         color: #00d1ff; text-decoration: none; background: rgba(0, 209, 255, 0.1);

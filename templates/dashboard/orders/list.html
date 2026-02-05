@@ -24,116 +24,69 @@
 
     {# 2. ORDERLAR RO'YXATI #}
     {% else %}
-        <form id="bulk-action-form" method="POST" action="#">
-            {% csrf_token %}
-
-            <div style="margin-bottom: 35px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
-                <div>
-                    <a href="{% url 'orders' %}" style="color: #00d1ff; text-decoration: none; font-size: 14px; font-weight: 600;">
-                        <i class="fas fa-arrow-left"></i> Boshqa do'kon
-                    </a>
-                    <h1 style="color: white; font-size: 28px; font-weight: 800; margin-top: 10px;">📦 Buyurtmalar</h1>
-                </div>
-
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <button type="submit" id="bulk-delete-btn" style="display: none; background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid #ff4d4d; padding: 10px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s;">
-                        <i class="fas fa-trash-alt"></i> Tanlanganlarni o'chirish (<span id="selected-count">0</span>)
-                    </button>
-
-                    <div style="display: flex; gap: 8px; background: #161b22; padding: 6px; border-radius: 12px; border: 1px solid #30363d;">
-                        <a href="?" class="status-btn {% if not request.GET.status %}active{% endif %}">HAMMASI</a>
-                        <a href="?status=yangi" class="status-btn {% if request.GET.status == 'yangi' %}active{% endif %}">YANGI</a>
-                        <a href="?status=tayyorlanmoqda" class="status-btn {% if request.GET.status == 'tayyorlanmoqda' %}active{% endif %}">TAYYORLANMOQDA</a>
-                        <a href="?status=yakunlangan" class="status-btn {% if request.GET.status == 'yakunlangan' %}active{% endif %}">YAKUNLANGAN</a>
-                    </div>
-                </div>
+        <div style="margin-bottom: 35px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <a href="{% url 'orders' %}" style="color: #00d1ff; text-decoration: none; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-arrow-left"></i> Boshqa do'kon
+                </a>
+                <h1 style="color: white; font-size: 28px; font-weight: 800; margin-top: 10px;">📦 Buyurtmalar</h1>
             </div>
 
-            <div style="background: #161b22; border-radius: 15px; border: 1px solid #30363d; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background: rgba(255,255,255,0.03); color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
-                            <th style="padding: 20px; text-align: left; width: 50px;">
-                                <input type="checkbox" id="master-checkbox" style="cursor: pointer; transform: scale(1.2);">
-                            </th>
-                            <th style="padding: 20px; text-align: left;">Mijoz</th>
-                            <th style="padding: 20px; text-align: left;">Summa</th>
-                            <th style="padding: 20px; text-align: center;">Status</th>
-                            <th style="padding: 20px; text-align: right;">Amallar</th>
+            <div style="display: flex; gap: 8px; background: #161b22; padding: 6px; border-radius: 12px; border: 1px solid #30363d;">
+                <a href="?" class="status-btn {% if not request.GET.status %}active{% endif %}">HAMMASI</a>
+                <a href="?status=yangi" class="status-btn {% if request.GET.status == 'yangi' %}active{% endif %}">YANGI</a>
+                <a href="?status=tayyorlanmoqda" class="status-btn {% if request.GET.status == 'tayyorlanmoqda' %}active{% endif %}">TAYYORLANMOQDA</a>
+                <a href="?status=yakunlangan" class="status-btn {% if request.GET.status == 'yakunlangan' %}active{% endif %}">YAKUNLANGAN</a>
+            </div>
+        </div>
+
+        <div style="background: #161b22; border-radius: 15px; border: 1px solid #30363d; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: rgba(255,255,255,0.03); color: #8b949e; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
+                        <th style="padding: 20px; text-align: left;">Mijoz</th>
+                        <th style="padding: 20px; text-align: left;">Summa</th>
+                        <th style="padding: 20px; text-align: center;">Status</th>
+                        <th style="padding: 20px; text-align: right;">Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in current_shop_orders %}
+                        {% if not request.GET.status or request.GET.status == order.status %}
+                        <tr class="table-row" style="border-bottom: 1px solid #30363d; transition: 0.2s;">
+                            <td style="padding: 15px 20px;">
+                                <div style="color: white; font-weight: 700; font-size: 15px;">{{ order.first_name }}</div>
+                                <div style="color: #8b949e; font-size: 12px; margin-top: 3px;">{{ order.phone_number }}</div>
+                            </td>
+                            <td style="padding: 15px 20px;">
+                                <div style="color: #00ffaa; font-weight: 800; font-size: 15px;">{{ order.total_price }} so'm</div>
+                                <div style="color: #8b949e; font-size: 11px; margin-top: 3px;">{{ order.created_at|date:"d.m.Y H:i" }}</div>
+                            </td>
+                            <td style="padding: 15px 20px; text-align: center;">
+                                <span class="badge {{ order.status }}">{{ order.status|upper }}</span>
+                            </td>
+                            <td style="padding: 15px 20px; text-align: right;">
+                                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                    <a href="{% url 'order_id' shop_id order.id %}" class="btn-edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'order_delete' order.id %}" onclick="return confirm('Haqiqatan o\'chirmoqchimisiz?')" class="btn-delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in current_shop_orders %}
-                            {% if not request.GET.status or request.GET.status == order.status %}
-                            <tr class="table-row" style="border-bottom: 1px solid #30363d; transition: 0.2s;">
-                                <td style="padding: 15px 20px;">
-                                    <input type="checkbox" name="order_ids" value="{{ order.id }}" class="child-checkbox" style="cursor: pointer; transform: scale(1.2);">
-                                </td>
-                                <td style="padding: 15px 20px;">
-                                    <div style="color: white; font-weight: 700; font-size: 15px;">{{ order.first_name }}</div>
-                                    <div style="color: #8b949e; font-size: 12px; margin-top: 3px;">{{ order.phone_number }}</div>
-                                </td>
-                                <td style="padding: 15px 20px;">
-                                    <div style="color: #00ffaa; font-weight: 800; font-size: 15px;">{{ order.total_price }} so'm</div>
-                                    <div style="color: #8b949e; font-size: 11px; margin-top: 3px;">{{ order.created_at|date:"d.m.Y H:i" }}</div>
-                                </td>
-                                <td style="padding: 15px 20px; text-align: center;">
-                                    <span class="badge {{ order.status }}">{{ order.status|upper }}</span>
-                                </td>
-                                <td style="padding: 15px 20px; text-align: right;">
-                                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                                        <a href="{% url 'order_id' shop_id order.id %}" class="btn-edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            {% endif %}
-                        {% empty %}
-                            <tr>
-                                <td colspan="5" style="padding: 50px; text-align: center; color: #8b949e;">🔎 Ma'lumot topilmadi.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </form>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" style="padding: 50px; text-align: center; color: #8b949e;">🔎 Ma'lumot topilmadi.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 </div>
-
-<script>
-    const masterCheckbox = document.getElementById('master-checkbox');
-    const childCheckboxes = document.querySelectorAll('.child-checkbox');
-    const deleteBtn = document.getElementById('bulk-delete-btn');
-    const countSpan = document.getElementById('selected-count');
-    const form = document.getElementById('bulk-action-form');
-
-    function updateDeleteButton() {
-        const checkedCount = document.querySelectorAll('.child-checkbox:checked').length;
-        if (checkedCount > 0) {
-            deleteBtn.style.display = 'block';
-            countSpan.textContent = checkedCount;
-        } else {
-            deleteBtn.style.display = 'none';
-        }
-    }
-
-    masterCheckbox.addEventListener('change', function() {
-        childCheckboxes.forEach(cb => cb.checked = this.checked);
-        updateDeleteButton();
-    });
-
-    childCheckboxes.forEach(cb => {
-        cb.addEventListener('change', updateDeleteButton);
-    });
-
-    form.addEventListener('submit', function(e) {
-        const checkedCount = document.querySelectorAll('.child-checkbox:checked').length;
-        if (!confirm(`Haqiqatan ham ${checkedCount} ta buyurtmani o'chirmoqchimisiz?`)) {
-            e.preventDefault();
-        }
-    });
-</script>
 
 <style>
     .status-btn { padding: 8px 16px; border-radius: 8px; text-decoration: none; color: #8b949e; font-size: 11px; font-weight: 800; transition: 0.3s; }
@@ -148,7 +101,9 @@
     .btn-edit { background: rgba(0,209,255,0.1); color: #00d1ff; padding: 10px; border-radius: 10px; text-decoration: none; border: 1px solid rgba(0,209,255,0.2); transition: 0.3s; }
     .btn-edit:hover { background: #00d1ff; color: #0a0b10; }
 
-    #bulk-delete-btn:hover { background: #ff4d4d !important; color: white !important; }
+    .btn-delete { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; padding: 10px; border-radius: 10px; text-decoration: none; border: 1px solid rgba(255, 77, 77, 0.2); transition: 0.3s; }
+    .btn-delete:hover { background: #ff4d4d; color: white; }
+
     .table-row:hover { background: rgba(255,255,255,0.02) !important; }
     .cyber-card:hover { border-color: #00d1ff !important; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 209, 255, 0.1); }
 </style>

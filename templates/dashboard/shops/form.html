@@ -3,7 +3,7 @@
 {% block content %}
 <div style="background: #0a0b10; min-height: 100vh; padding: 40px; color: #ffffff; font-family: 'Inter', sans-serif;">
     <div style="max-width: 1100px; margin: 0 auto;">
-        
+
         <a href="{% url 'shops' %}" style="text-decoration: none; color: #8b949e; font-size: 14px; font-weight: 600; margin-bottom: 25px; display: inline-block; transition: 0.3s;" onmouseover="this.style.color='#00d1ff'">
             <i class="fas fa-arrow-left"></i> Do'konlar ro'yxatiga qaytish
         </a>
@@ -14,15 +14,22 @@
                     <span style="font-size: 40px;">🏬</span>
                 </div>
                 <div>
-                    <h1 style="margin: 0; font-size: 36px; font-weight: 800; color: #00d1ff;">{{ shop.name }}</h1>
-                    <a href="/shop/{{ shop.slug }}/" target="_blank" style="color: #00ffaa; text-decoration: none; font-size: 14px; font-weight: 600;">
-                        <i class="fas fa-external-link-alt"></i> visit/{{ shop.slug }}
+                    <h1 style="margin: 0; font-size: 36px; font-weight: 800; color: #00d1ff;">
+                        {{ shop.name }}{{ model.name }}
+                    </h1>
+                    {% with current_shop=shop|default:model %}
+                    {% if current_shop.slug %}
+                    <a href="/shop/{{ current_shop.slug }}/" target="_blank" style="color: #00ffaa; text-decoration: none; font-size: 14px; font-weight: 600;">
+                        <i class="fas fa-external-link-alt"></i> visit/{{ current_shop.slug }}
                     </a>
+                    {% endif %}
+                    {% endwith %}
                 </div>
             </div>
         </div>
 
-        <form method="POST" action="">
+        {% with current_shop=shop|default:model %}
+        <form method="POST" action="{% if current_shop.id %}{% url 'shop_edit' current_shop.id %}{% endif %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px;">
 
@@ -35,22 +42,22 @@
                         <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px;">
                             <div>
                                 <label style="color: #8b949e; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Do'kon nomi</label>
-                                <input type="text" name="name" value="{{ shop.name }}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 12px; color: white; margin-top: 8px; outline: none; font-size: 15px;" onfocus="this.style.borderColor='#00d1ff'">
+                                <input type="text" name="name" value="{{ current_shop.name|default:'' }}" style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 12px; color: white; margin-top: 8px; outline: none; font-size: 15px;" onfocus="this.style.borderColor='#00d1ff'">
                             </div>
                             <div>
                                 <label style="color: #8b949e; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Yaratilgan sana</label>
-                                <div style="margin-top: 15px; font-size: 16px; color: #8b949e; font-weight: 600;">{{ shop.created_at|date:"d.m.Y" }}</div>
+                                <div style="margin-top: 15px; font-size: 16px; color: #8b949e; font-weight: 600;">{{ current_shop.created_at|date:"d.m.Y" }}</div>
                             </div>
                         </div>
 
                         <div>
                             <label style="color: #8b949e; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Manzil</label>
-                            <input type="text" name="address" value="{{ shop.address|default:'' }}" placeholder="Masalan: Toshkent sh, Yunusobod..." style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 12px; color: white; margin-top: 8px; outline: none;" onfocus="this.style.borderColor='#00d1ff'">
+                            <input type="text" name="address" value="{{ current_shop.address|default:'' }}" placeholder="Masalan: Toshkent sh, Yunusobod..." style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 12px; color: white; margin-top: 8px; outline: none;" onfocus="this.style.borderColor='#00d1ff'">
                         </div>
 
                         <div>
                             <label style="color: #8b949e; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Tavsif (Description)</label>
-                            <textarea name="description" rows="4" style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 12px; color: white; margin-top: 8px; outline: none; resize: none;" onfocus="this.style.borderColor='#00d1ff'">{{ shop.description|default:'' }}</textarea>
+                            <textarea name="description" rows="4" style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 14px; border-radius: 12px; color: white; margin-top: 8px; outline: none; resize: none;" onfocus="this.style.borderColor='#00d1ff'">{{ current_shop.description|default:'' }}</textarea>
                         </div>
                     </div>
 
@@ -58,9 +65,12 @@
                         <button type="submit" style="flex: 2; padding: 16px; background: #00d1ff; color: #0a0b10; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;" onmouseover="this.style.boxShadow='0 0 20px rgba(0, 209, 255, 0.4)'">
                             <i class="fas fa-save"></i> O'zgarishlarni saqlash
                         </button>
-                        <button type="button" style="flex: 1; padding: 16px; background: transparent; color: #f85149; border: 1px solid #f85149; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(248, 81, 73, 0.1)'">
+
+                        {% if current_shop.id %}
+                        <button type="button" onclick="document.getElementById('delete-form').submit();" style="flex: 1; padding: 16px; background: transparent; color: #f85149; border: 1px solid #f85149; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(248, 81, 73, 0.1)'">
                             <i class="fas fa-trash-alt"></i> O'chirish
                         </button>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -72,26 +82,30 @@
 
                         <div style="margin-bottom: 20px;">
                             <label style="font-size: 11px; color: #8b949e; font-weight: 700; text-transform: uppercase;">Telegram Bot Token</label>
-                            <input type="text" name="bot_token" value="{{ shop.bot_token|default:'' }}" placeholder="8577089923:AAFs..." style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 10px; color: #00ffaa; margin-top: 8px; font-family: monospace; font-size: 13px; outline: none;" onfocus="this.style.borderColor='#00ffaa'">
+                            <input type="text" name="bot_token" value="{{ current_shop.bot_token|default:'' }}" placeholder="8577089923:AAFs..." style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 10px; color: #00ffaa; margin-top: 8px; font-family: monospace; font-size: 13px; outline: none;" onfocus="this.style.borderColor='#00ffaa'">
                         </div>
 
                         <div style="margin-bottom: 25px;">
                             <label style="font-size: 11px; color: #8b949e; font-weight: 700; text-transform: uppercase;">Chat ID</label>
-                            <input type="text" name="chat_id" value="{{ shop.chat_id|default:'' }}" placeholder="7421875223" style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 10px; color: white; margin-top: 8px; font-size: 18px; font-weight: 700; outline: none;" onfocus="this.style.borderColor='#ffffff'">
+                            <input type="text" name="chat_id" value="{{ current_shop.chat_id|default:'' }}" placeholder="7421875223" style="width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 12px; border-radius: 10px; color: white; margin-top: 8px; font-size: 18px; font-weight: 700; outline: none;" onfocus="this.style.borderColor='#ffffff'">
                         </div>
 
                         <a href="https://t.me/professional_working_bot" target="_blank" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0, 209, 255, 0.1); color: #00d1ff; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 13px; border: 1px solid rgba(0, 209, 255, 0.2); transition: 0.3s;" onmouseover="this.style.background='rgba(0, 209, 255, 0.2)'">
                             <i class="fas fa-robot"></i> CHAT ID OLISH BOTI
                         </a>
-
-                        <p style="font-size: 11px; color: #8b949e; margin-top: 15px; text-align: center; line-height: 1.4;">
-                            Bot tokenini @BotFather dan oling. Chat ID olish uchun yuqoridagi botga start bosing.
-                        </p>
                     </div>
                 </div>
 
             </div>
         </form>
+
+        {% if current_shop.id %}
+        <form id="delete-form" action="{% url 'shop_delete' current_shop.id %}" method="POST" style="display: none;">
+            {% csrf_token %}
+        </form>
+        {% endif %}
+        {% endwith %}
+
     </div>
 </div>
 {% endblock %}
