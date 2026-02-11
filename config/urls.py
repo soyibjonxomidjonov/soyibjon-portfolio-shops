@@ -24,6 +24,7 @@ from config.settings import MEDIA_ROOT
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('apps.dashboard.urls')),
+    path('api/', include('apps.api.urls')),
     path('', include('apps.shops_app.urls')),
 ]
 
