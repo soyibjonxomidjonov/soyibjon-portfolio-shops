@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from apps.shops_app.forms import LoginForm, UserForm
 from apps.shops_app.forms import User
 from apps.shops_app.services.decorators import logout_def
+from django.contrib.auth.hashers import check_password
 
 
 def login(request):
@@ -12,7 +13,7 @@ def login(request):
             forma_password = form.cleaned_data.get("password")
             try:
                 baza_user = User.objects.get(username=forma_user)
-                if str(baza_user.password) == str(forma_password):
+                if check_password(forma_password, baza_user.password): # BU TO'G'RI
                     request.session["user_id"] = baza_user.id
                     next_url = request.GET.get('next', '/')
                     return redirect(next_url)
@@ -28,7 +29,9 @@ def register(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)  # Bazaga darrov saqlama
+            user.set_password(form.cleaned_data['password'])  # Parolni shifrlaydi!
+            user.save()
             return redirect('login')
         else:
             print(form.errors)

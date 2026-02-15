@@ -12,6 +12,8 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 
+from apps.api.views import ProductViewSet, OrderViewSet, ShopViewSet, UserViewSet
+
 
 class JWTSchemaGenerator(OpenAPISchemaGenerator):
 
@@ -27,9 +29,9 @@ class JWTSchemaGenerator(OpenAPISchemaGenerator):
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="API E-Commerce",
+        title="API Soyibjon Shops",
         default_version='v1',
-        description='E-Commerce API',
+        description='Soyibjon Shops API',
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="soyibjon12ss@gmail.com"),
         license=openapi.License(name="BSD License"),
@@ -40,7 +42,10 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
-router.register(r'', '')
+router.register(r'products', ProductViewSet)
+router.register(r'orders', OrderViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'shops', ShopViewSet)
 
 urlpatterns = [
     path('v1/', include(router.urls)),
