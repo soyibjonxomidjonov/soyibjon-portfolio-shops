@@ -11,7 +11,7 @@ from apps.shops_app.models import Shop
 def product_add(request):
     owner_shops = Shop.objects.filter(owner=request.my_user)
     if not owner_shops.exists():
-        return HttpResponse("Sizda do'kon mavjud emas. Iltimos, avval do'kon yarating.")
+        return redirect('../dashboard/shop/create/')
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES, user=request.my_user)
         if form.is_valid():
