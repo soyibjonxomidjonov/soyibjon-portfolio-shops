@@ -3,6 +3,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from apps.api.permissions import IsOwnerOrReadOnly
 from apps.api.serializers import OrderSerializer, ProductSerializer, ShopSerializer, UserSerializer
@@ -16,6 +18,7 @@ class CustomPagination(PageNumberPagination):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -26,6 +29,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -35,7 +39,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
 
 class ShopViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
@@ -44,7 +49,8 @@ class ShopViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)

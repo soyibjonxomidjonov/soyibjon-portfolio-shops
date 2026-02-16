@@ -1,10 +1,215 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSaaS | Biznesingizni Avtomatlashtiring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Mouse Tracker Effect */
+        #cursor-blur {
+            height: 400px;
+            width: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            transition: transform 0.1s ease-out;
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.08) 0%, rgba(3, 7, 18, 1) 100%);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
+            transition: 0.3s;
+        }
+
+        .btn-premium:hover {
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px -10px rgba(99, 102, 241, 0.7);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e1e2e; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
 </head>
 <body>
-<h1>Salom Dunyo</h1>
+
+    <div id="cursor-blur"></div>
+
+    <div class="hero-gradient relative min-h-screen">
+        <nav class="fixed top-0 left-0 w-full z-[100] px-6 py-6 backdrop-blur-md border-b border-white/5">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-3 group cursor-pointer">
+                    <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform shadow-lg shadow-indigo-500/50">
+                        <i class="fa-solid fa-rocket text-white"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tighter italic text-white">SMART<span class="text-indigo-500">SaaS</span></span>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="{% url 'login' %}" class="px-6 py-2 text-sm font-bold text-gray-400 hover:text-white transition">Kirish</a>
+                    <a href="../dashboard/shop/create/" class="btn-premium px-6 py-2 rounded-xl text-sm font-black uppercase tracking-wider">Do'kon ochish</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="pt-40 pb-20 px-6 relative z-10 flex flex-col items-center">
+            <div class="text-center max-w-4xl">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black mb-8 uppercase tracking-[3px]">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                    </span>
+                    Kelajak texnologiyasi tayyor
+                </div>
+
+                <h1 class="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-none">
+                    <span id="typed-text"></span> <br>
+                    <span class="text-gradient">O'z Biznesingizda</span>
+                </h1>
+
+                <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light italic">
+                    SmartSaaS — bu shunchaki do'kon emas. Bu sizning Telegram botingiz bilan integratsiyalashgan, shaxsiy linkka ega va 24/7 ishlaydigan savdo imperiyangiz.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6 justify-center mb-32">
+                    <a href="../dashboard" class="btn-premium px-12 py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 group">
+                        Boshlash <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </a>
+                    <a href="#features" class="glass-card px-12 py-5 rounded-2xl font-black text-xl hover:bg-white/10 transition">
+                        Imkoniyatlar
+                    </a>
+                </div>
+            </div>
+
+            <section id="features" class="max-w-7xl mx-auto w-full grid md:grid-cols-3 gap-8 py-20">
+                <div class="glass-card p-10 rounded-[40px] relative overflow-hidden group">
+                    <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-2xl text-indigo-400">
+                        <i class="fa-brands fa-telegram"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 group-hover:text-indigo-400 transition">Smart Bot Xabarnoma</h3>
+                    <p class="text-gray-500 leading-relaxed">Mijoz buyurtma berishi bilan botingizga: Ismi, raqami, mahsulot turi va manzili soniyalar ichida yetib boradi.</p>
+                </div>
+
+                <div class="glass-card p-10 rounded-[40px] border-indigo-500/30">
+                    <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-2xl text-purple-400">
+                        <i class="fa-solid fa-link"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 text-purple-400">Shaxsiy Link</h3>
+                    <p class="text-gray-500 leading-relaxed">Har bir tadbirkor uchun maxsus link. Linkni Instagram yoki Telegram profilingizga qo'ying va savdoni boshlang.</p>
+                </div>
+
+                <div class="glass-card p-10 rounded-[40px]">
+                    <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-2xl text-cyan-400">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-4 group-hover:text-cyan-400 transition">Istalgan yo'nalish</h3>
+                    <p class="text-gray-500 leading-relaxed">Ovqat, kiyim, xizmat ko'rsatish yoki raqamli mahsulotlar — tizim har qanday biznesga 100% moslashadi.</p>
+                </div>
+            </section>
+
+            <section class="max-w-4xl mx-auto w-full py-32 text-center">
+                <div class="glass-card p-12 rounded-[50px] relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-600/10 blur-[80px]"></div>
+                    <h2 class="text-4xl font-black mb-8 italic uppercase tracking-tighter">Loyihaning <span class="text-indigo-500">Mohiyati</span></h2>
+                    <p class="text-gray-400 text-lg leading-loose">
+                        Bizning maqsadimiz — kichik va o'rta biznes egalari uchun texnik murakkabliklarni yo'q qilish.
+                        Sizga dasturchi yoki dizayner kerak emas. Shunchaki ro'yxatdan o'tasiz, do'kon nomini tanlaysiz va
+                        mahsulot yuklaysiz. Qolgan barcha narsani: buyurtmalarni boshqarish, savat va mijoz bilan aloqani
+                        <span class="text-white font-bold italic">SmartSaaS</span> o'z zimmasiga oladi.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="py-20 border-t border-white/5 relative z-10">
+            <div class="max-w-7xl mx-auto px-6 flex flex-col md:row justify-between items-center gap-10">
+                <div class="text-center md:text-left">
+                    <h4 class="text-2xl font-black italic mb-2 tracking-tighter">SMART<span class="text-indigo-500">SaaS</span></h4>
+                    <p class="text-gray-600 text-xs uppercase tracking-[3px]">Kelajakni hozir quring</p>
+                </div>
+                <div class="text-center text-gray-700 text-[10px] font-black uppercase tracking-[5px]">
+                    Build by Soyibjon Xomidjonov | 2026
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mouse Blur Tracker
+        const blur = document.getElementById("cursor-blur");
+        document.addEventListener("mousemove", (e) => {
+            blur.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
+        });
+
+        // Interaktiv yozuv (Typed.js)
+        new Typed('#typed-text', {
+            strings: ['Online Savdoni', 'Telegram Botni', 'Smart Tizimni', 'Yangi Davrni'],
+            typeSpeed: 60,
+            backSpeed: 40,
+            loop: true,
+            backDelay: 2000
+        });
+
+        // Hover Animation for cards
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
 </body>
 </html>

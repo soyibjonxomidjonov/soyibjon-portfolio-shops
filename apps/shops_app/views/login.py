@@ -43,4 +43,4 @@ def register(request):
 
 def logout_page(request):
     logout_def(request)
-    return redirect("login")
+    return redirect("main_page")

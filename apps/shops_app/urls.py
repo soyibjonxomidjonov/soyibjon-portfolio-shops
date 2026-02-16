@@ -7,7 +7,7 @@ urlpatterns = [
 
     # Login, logout and register urls
     path('login/', login.login, name='login'),
-    path('logout/', login.logout_def, name="logout_page"),
+    path('logout/', login.logout_page, name="logout_page"),
 
     # Saved form urls
     path('register/', login.register, name='register'),

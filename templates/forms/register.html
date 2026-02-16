@@ -1,9 +1,117 @@
 {% extends 'form_base.html' %}
 
-{% block title %}Register{% endblock %}
-{% block head_title %}Register{% endblock %}
-{% block btn_text %}Saqlash{% endblock %}
+{% block title %}Register | Cyber Market{% endblock %}
+{% block head_title %}REGISTRATSIYA{% endblock %}
+
+{% block content %}
+<style>
+    /* Dizayn loyihangizga mos bo'lishi uchun */
+    .cyber-input-wrapper {
+        position: relative;
+        margin-bottom: 18px;
+        text-align: left;
+    }
+
+    .cyber-input-wrapper label {
+        display: block;
+        color: #94a3b8;
+        font-size: 11px;
+        letter-spacing: 2px;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+    }
+
+    .input-icon-group {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-icon-group i {
+        position: absolute;
+        left: 15px;
+        color: var(--neon-cyan);
+        font-size: 14px;
+        opacity: 0.6;
+        z-index: 5;
+    }
+
+    .custom-input {
+        width: 100%;
+        padding: 12px 15px 12px 45px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        color: white !important;
+        font-family: 'Rajdhani', sans-serif !important;
+        font-size: 15px !important;
+        transition: all 0.3s ease;
+        outline: none;
+    }
+
+    .custom-input:focus {
+        border-color: var(--neon-cyan) !important;
+        background: rgba(0, 242, 255, 0.08) !important;
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.2) !important;
+    }
+
+    .action-btn {
+        margin-top: 10px !important;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="cyber-input-wrapper">
+        <label>First Name</label>
+        <div class="input-icon-group">
+            <i class="fa-solid fa-address-card"></i>
+            <input type="text" name="first_name" class="custom-input" placeholder="Ismingizni kiriting" required>
+        </div>
+    </div>
+
+    <div class="cyber-input-wrapper">
+        <label>Username</label>
+        <div class="input-icon-group">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" name="username" class="custom-input" placeholder="User_123" required>
+        </div>
+    </div>
+
+    <div class="cyber-input-wrapper">
+        <label>Email Address</label>
+        <div class="input-icon-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" name="email" class="custom-input" placeholder="example@gmail.com" required>
+        </div>
+    </div>
+
+    <div class="cyber-input-wrapper">
+        <label>Password</label>
+        <div class="input-icon-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password" class="custom-input" placeholder="••••••••" required>
+        </div>
+    </div>
+
+    <div class="cyber-input-wrapper">
+        <label>Confirm Password</label>
+        <div class="input-icon-group">
+            <i class="fa-solid fa-shield-halved"></i>
+            <input type="password" name="confirm_password" class="custom-input" placeholder="••••••••" required>
+        </div>
+    </div>
+
+    <button type="submit" class="action-btn">
+        RO'YXATDAN O'TISH
+    </button>
+</form>
+{% endblock %}
 
 {% block extra_links %}
-<a href="../login/">Login qilish</a>
+    <span style="color: #64748b;">Hisobingiz bormi?</span>
+    <a href="{% url 'login' %}">Kirish qilish</a>
 {% endblock %}
