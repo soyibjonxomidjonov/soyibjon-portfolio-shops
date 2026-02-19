@@ -16,21 +16,49 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 
-from config.settings import MEDIA_ROOT
+# Swagger uchun kerakli importlar
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+# Agar maxsus Generatoringiz bo'lsa uni import qiling, 
+# bo'lmasa standartidan foydalanamiz
+try:
+    from apps.api.generator import JWTSchemaGenerator # O'zingizning yo'lingizni tekshiring
+except ImportError:
+    from drf_yasg.generators import OpenAPISchemaGenerator as JWTSchemaGenerator
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="API Soyibjon Shops",
+        default_version='v1',
+        description='Soyibjon Shops API',
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="soyibjon12ss@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+    generator_class=JWTSchemaGenerator,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('apps.dashboard.urls')),
     path('api/', include('apps.api.urls')),
     path('', include('apps.shops_app.urls')),
+    
+    # Swagger va Redoc UI
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name="schema-json"),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-
-
+# Media va Static fayllar uchun (DEBUG va Production uchun)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
