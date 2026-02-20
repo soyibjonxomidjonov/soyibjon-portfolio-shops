@@ -1,2 +1,2 @@
-# soyibjon-diplom-ishi
-Bu loyiha meni kursimdagi o'zim amaliy yozgan diplom ishi uchun  
+# soyibjon-portfolio
+Bu loyiha meni kursimdagi o'zim amaliy yozgan kurs ishi uchun  qilgan loyiham
