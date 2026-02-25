@@ -65,7 +65,7 @@ jobs:
           username: ec2-user   # 6-qator: Server user nomi (ubuntu yoki ec2-user)
           key: ${{ secrets.EC2_SSH_KEY }}     # 7-qator: .pem faylingiz ichidagi maxfiy kod
           script: |  # 8-qator: SSH orqali kirgandan keyin bajarilishi kerak bo'lgan buyruqlar ro'yxati
-            cd /home/ubuntu/soyibjon-diplom-ishi  # 9-qator: Loyiha turgan papkaga kirish
+            cd /home/ec2-user/soyibjon-diplom-ishi  # 9-qator: Loyiha turgan papkaga kirish
             git pull origin main                      # 10-qator: GitHub'dagi yangi kodni serverga yuklab olish
             source .venv/bin/activate                 # 11-qator: Python virtual muhitini yoqish
             pip install -r requirements.txt           # 12-qator: Yangi kutubxonalar qo'shilgan bo'lsa, o'rnatish
