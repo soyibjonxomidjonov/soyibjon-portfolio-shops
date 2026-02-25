@@ -52,3 +52,23 @@ jobs:
         pip install -r requirements.txt
     - name: Run tests
       run: python manage.py test
+  deploy:
+    needs: build  # 1-qator: Build (testlar) muvaffaqiyatli o'tmaguncha ishga tushma
+    runs-on: ubuntu-latest  # 2-qator: Bu buyruqlarni bajarish uchun virtual Ubuntu muhitini ishlat
+    if: github.ref == 'refs/heads/main'  # 3-qator: Faqat 'main' branchiga kod kelganda ishla
+
+    steps:
+      - name: AWS EC2 ga SSH orqali ulanish
+        uses: appleboy/ssh-action@master # 4-qator: SSH orqali serverga kirish uchun maxsus tayyor plagin
+        with:
+          host: ${{ secrets.HOST_DNS }}       # 5-qator: Serveringiz IP manzili (Secrets'dan olinadi)
+          username: ${{ secrets.HOST_USER }}   # 6-qator: Server user nomi (ubuntu yoki ec2-user)
+          key: ${{ secrets.EC2_SSH_KEY }}     # 7-qator: .pem faylingiz ichidagi maxfiy kod
+          script: |  # 8-qator: SSH orqali kirgandan keyin bajarilishi kerak bo'lgan buyruqlar ro'yxati
+            cd /home/ubuntu/soyibjon-diplom-shops  # 9-qator: Loyiha turgan papkaga kirish
+            git pull origin main                      # 10-qator: GitHub'dagi yangi kodni serverga yuklab olish
+            source .venv/bin/activate                 # 11-qator: Python virtual muhitini yoqish
+            pip install -r requirements.txt           # 12-qator: Yangi kutubxonalar qo'shilgan bo'lsa, o'rnatish
+            python manage.py migrate                  # 13-qator: Bazadagi o'zgarishlarni (model) qo'llash
+            python manage.py collectstatic --noinput  # 14-qator: CSS, JS fayllarni statik papkaga yig'ish
+            sudo systemctl restart gunicorn           # 15-qator: Gunicorn (server)ni yangi kod bilan qayta o't oldirish
