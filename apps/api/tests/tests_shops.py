@@ -29,7 +29,7 @@ class ShopsTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['results']), 3)
-        self.assertEqual(response.data['results'][0]['name'], "Anvar Electronics")
+        self.assertEqual(response.data['results'][0]['name'], "Anvar Books")
         self.assertIn('anvar', response.data['results'][0]['slug'])
 
 
