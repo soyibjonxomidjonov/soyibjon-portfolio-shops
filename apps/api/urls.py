@@ -42,10 +42,10 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
-router.register(r'products', ProductViewSet)
-router.register(r'orders', OrderViewSet)
-router.register(r'users', UserViewSet)
-router.register(r'shops', ShopViewSet)
+router.register(r'products', ProductViewSet, basename='products')
+router.register(r'orders', OrderViewSet, basename='orders')
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'shops', ShopViewSet, basename='shops')
 
 urlpatterns = [
     path('v1/', include(router.urls)),

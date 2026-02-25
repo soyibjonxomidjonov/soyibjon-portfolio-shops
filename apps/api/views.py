@@ -2,6 +2,7 @@ from django_filters import rest_framework as django_filters
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import filters
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -19,41 +20,52 @@ class CustomPagination(PageNumberPagination):
 
 class OrderViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsOwnerOrReadOnly]
-    queryset = Order.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = OrderFilter
     search_fields = ['first_name', 'phone_number', 'address']
     pagination_class = CustomPagination
+    def get_queryset(self):
+        return Order.objects.filter(shop__owner=self.request.user.id)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsOwnerOrReadOnly]
-    queryset = Product.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = ProductFilter
     search_fields = ['name', 'description', 'price']
     pagination_class = CustomPagination
+    def get_queryset(self):
+        return Product.objects.filter(shop__owner=self.request.user.id)
+    def perform_create(self, serializer):
+        shop = serializer.validated_data.get('shop')
+        if shop.owner != self.request.user:
+            raise ValidationError({"shop": "Bu do'kon sizga tegishli emas yoki mavjud emas."})
+        serializer.save()
 
 class ShopViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = Shop.objects.all()
     serializer_class = ShopSerializer
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = ShopFilter
     search_fields = ['name', 'description', 'address']
     pagination_class = CustomPagination
+    def get_queryset(self):
+        return Shop.objects.filter(owner=self.request.user.id).order_by('-created_at')
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class UserViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (django_filters.DjangoFilterBackend, filters.SearchFilter)
     filterset_class = UserFilter
     search_fields = ['first_name', 'username', 'gmail']
     pagination_class = CustomPagination
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)

@@ -6,6 +6,16 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'shop', 'name', 'image', 'description', 'price', 'stock', 'unity', 'created_at']
+        # read_only_fields = ['shop']
+
+    def validate(self, data):
+        # Agar so'rovda yangi 'shop' kelayotgan bo'lsa
+        if 'shop' in data:
+            user = self.context['request'].user
+            if data['shop'].owner != user:
+                raise serializers.ValidationError(
+                    {"shop": "Sizga tegishli bo'lmagan do'konga mahsulotni ulay olmaysiz!"})
+        return data
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +26,7 @@ class OrderSerializer(serializers.ModelSerializer):
 class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
-        fields = ['id', 'owner', 'name', 'description', 'address', 'bot_token', 'chat_id', 'slug', 'created_at']
+        fields = ['id', 'name', 'description', 'address', 'bot_token', 'chat_id', 'slug', 'created_at']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
