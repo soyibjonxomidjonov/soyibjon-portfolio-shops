@@ -70,7 +70,7 @@ jobs:
             git reset --hard origin/main    # ← eski o'zgarishlarni bekor qiladi                    
                     
                     
-            docker build -t soyibjon-diplom-ishi-web:latest .
+            docker build --no-cache -t soyibjon-diplom-ishi-web:latest .
             docker-compose up -d --no-deps web
             docker-compose up -d --no-deps celery
 
