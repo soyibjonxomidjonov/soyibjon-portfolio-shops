@@ -18,7 +18,7 @@ class ShopFilter(django_filters.FilterSet):
     slug = django_filters.CharFilter(field_name="slug", lookup_expr='icontains')
     class Meta:
         model = Shop
-        fields = ['name', 'owner', 'exact']
+        fields = ['name', 'owner', 'slug']
 
 class OrderFilter(django_filters.FilterSet):
     shop = django_filters.CharFilter(field_name="shop__name", lookup_expr='icontains')
