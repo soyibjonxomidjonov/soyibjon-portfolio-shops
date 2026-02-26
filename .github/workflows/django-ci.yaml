@@ -66,7 +66,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ec2-user/soyibjon-diplom-ishi  
-            git pull origin main                     
+            git fetch origin main
+            git reset --hard origin/main    # ← eski o'zgarishlarni bekor qiladi                    
                     
                     
             docker build -t soyibjon-diplom-ishi-web:latest .
