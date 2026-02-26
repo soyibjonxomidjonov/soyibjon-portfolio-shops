@@ -67,15 +67,23 @@ jobs:
           script: |  # 8-qator: SSH orqali kirgandan keyin bajarilishi kerak bo'lgan buyruqlar ro'yxati
             cd /home/ec2-user/soyibjon-diplom-ishi  # 9-qator: Loyiha turgan papkaga kirish
             git pull origin main                      # 10-qator: GitHub'dagi yangi kodni serverga yuklab olish
-            docker-compose up -d --build
+                    
+                    
+            docker build -t soyibjon-diplom-ishi-web:latest .
+              docker-compose up -d --no-deps web
+              docker-compose up -d --no-deps celery
+#            docker-compose up -d --build
+#            docker-compose down
+            
+            # 2. Buildx muammosini aylanib o'tib, qo'lda build qilish
+#                    docker build -t soyibjon-diplom-ishi-web:latest .
+#                    docker build -t soyibjon-diplom-ishi-celery:latest .
+            
+            # 3. Yangi obrazlar bilan konteynerlarni ko'tarish
+#                    docker-compose up -d
 
             # Bazani migratsiya qilish (konteyner ichida bajariladi)
             docker-compose exec -T web python manage.py migrate
 
             # Statik fayllarni yig'ish (konteyner ichida bajariladi)
             docker-compose exec -T web python manage.py collectstatic --noinput
-#            source .venv/bin/activate                 # 11-qator: Python virtual muhitini yoqish
-#            pip install -r requirements.txt           # 12-qator: Yangi kutubxonalar qo'shilgan bo'lsa, o'rnatish
-#            python manage.py migrate                  # 13-qator: Bazadagi o'zgarishlarni (model) qo'llash
-#            python manage.py collectstatic --noinput  # 14-qator: CSS, JS fayllarni statik papkaga yig'ish
-#            sudo systemctl restart gunicorn           # 15-qator: Gunicorn (server)ni yangi kod bilan qayta o't oldirish
