@@ -11,4 +11,5 @@ gunicormda run bo'lgan va nginx ham sozlangan
 
 O'rgangan bilimlar:
 Men bu loyihada python django va drf bo'yicha  bilimlarimni ancha mustahkamladim va web dasturlarni qanday to'g'ri yozish qanday ishlab  chiqishlishi bo'yicha ancha narsalarni to'liq tushundim va asosiysi amazon web service ya'ni awsning ec2 ga  loyihani qo'yib docker-compose orqali ko'tardim va u yerda nginx va boshqa narsalarni to'g'rilab server hozircda muvoffaqqiyatli ishga tushgan va hozirda ishlayapti va o'zim teplatelar bilan ishlangan qism qismlar dashboard asosiy qismlarni yozilgan 
+va bu loyihada CI CD va test yozish kabi narsalarni tushunib hozir yoza olaman va o'zimni real proyektlarimda ishlata olaman
 
