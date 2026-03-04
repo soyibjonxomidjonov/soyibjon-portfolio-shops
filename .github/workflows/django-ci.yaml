@@ -73,11 +73,8 @@ jobs:
              
                                 
             docker build -t soyibjon-diplom-ishi-web:latest .
-
-
-            docker-compose up -d --no-deps web
-            docker-compose up -d --no-deps celery
-            docker-compose up -d
+            docker tag soyibjon-diplom-ishi-web:latest soyibjon-diplom-ishi-celery:latest
+            docker-compose up -d --no-build
 
 
             docker-compose exec -T web python manage.py migrate
