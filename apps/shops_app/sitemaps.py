@@ -12,5 +12,4 @@ class ShopSitemap(Sitemap):
 
 
 
-# SInov uchun
 
