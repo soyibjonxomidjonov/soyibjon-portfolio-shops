@@ -10,7 +10,6 @@ from .models.shop import Shop
 @shared_task
 def send_telegram_notification(order_id, products, customer, phone_number, address, total_price, created_at, status,
                                bot_token, chat_id):
-    time.sleep(5)
 
     method = 'sendMessage'
     message_text = (
@@ -29,7 +28,8 @@ def send_telegram_notification(order_id, products, customer, phone_number, addre
             data={
                 "chat_id": chat_id,
                 "text": message_text
-            }
+            },
+            timeout=10
         ).json()
         res_data = response
         print(f"Telegram javobi: {res_data}")  # Nima bo'layotganini ko'rish uchun
