@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'django_filters',
 #     react uchun corsheaders
     'corsheaders',
+#     Site map uchun applar
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
 
 ]
 
@@ -215,3 +218,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # CORS_ALLOW_ALL_ORIGINS = True
+
+# Site map
+SITE_ID = 1

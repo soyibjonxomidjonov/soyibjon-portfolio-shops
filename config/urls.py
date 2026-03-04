@@ -23,6 +23,21 @@ from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.contrib.sitemaps.views import sitemap
+from apps.shops_app.sitemaps import ShopSitemap
+
+
+sitemaps = {
+    'shops': ShopSitemap,
+}
+
+
+
+
+
+
+
+
 
 # Agar maxsus Generatoringiz bo'lsa uni import qiling, 
 # bo'lmasa standartidan foydalanamiz
@@ -55,6 +70,9 @@ urlpatterns = [
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name="schema-json"),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 ]
 
 # Media va Static fayllar uchun (DEBUG va Production uchun)
