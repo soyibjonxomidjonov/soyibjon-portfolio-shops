@@ -72,7 +72,7 @@ jobs:
              
              
                                 
-            docker build -t soyibjon-diplom-ishi-web:latest .
+            docker build --no-cache -t soyibjon-diplom-ishi-web:latest .
             docker tag soyibjon-diplom-ishi-web:latest soyibjon-diplom-ishi-celery:latest
             docker-compose up -d --no-build
 
