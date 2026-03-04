@@ -62,6 +62,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+
     path('dashboard/', include('apps.dashboard.urls')),
     path('api/', include('apps.api.urls')),
     path('', include('apps.shops_app.urls')),
@@ -72,7 +74,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
 
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 ]
 
 # Media va Static fayllar uchun (DEBUG va Production uchun)
