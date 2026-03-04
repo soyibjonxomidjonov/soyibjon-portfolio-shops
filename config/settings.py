@@ -228,3 +228,6 @@ CSRF_TRUSTED_ORIGINS = [
     'https://shops-platform.uz',
     'https://www.shops-platform.uz',
 ]
+
+# sitemap uchun kerakli sozlamalar
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
