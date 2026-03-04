@@ -221,3 +221,10 @@ CORS_ALLOWED_ORIGINS = [
 
 # Site map
 SITE_ID = 1
+
+
+# Bunda csrf uchun kerakli domenlar qo'shildi va ishlatishga tayyor
+CSRF_TRUSTED_ORIGINS = [
+    'https://shops-platform.uz',
+    'https://www.shops-platform.uz',
+]
