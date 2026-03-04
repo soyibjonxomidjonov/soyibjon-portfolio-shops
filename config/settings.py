@@ -235,3 +235,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Bu qo'shimcha odatda urlga kirganda / bo'lmasa unga o'zi slash qo'yib beradi
 APPEND_SLASH = True
+
+
+# Sinov uchun qo'shildi
