@@ -13,7 +13,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from apps.api.views import ProductViewSet, OrderViewSet, ShopViewSet, UserViewSet
-
+from apps.api.views import public_shop_by_slug, public_products_by_shop
 
 class JWTSchemaGenerator(OpenAPISchemaGenerator):
 
