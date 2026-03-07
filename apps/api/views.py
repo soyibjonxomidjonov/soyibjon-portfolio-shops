@@ -30,6 +30,10 @@ class OrderViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     def get_queryset(self):
         return Order.objects.filter(shop__owner=self.request.user.id)
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
 
 class ProductViewSet(viewsets.ModelViewSet):
