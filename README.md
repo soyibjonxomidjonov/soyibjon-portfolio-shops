@@ -3,7 +3,7 @@ Bu loyiha meni kursimdagi o'zim amaliy yozgan kurs ishi uchun  qilgan loyiham
 Bu loyihani asosiy maqsadi shunlardan iborat
 
 Muammo:
-Hozirgi kunda juda ko'p do'konlar bor  lekin ularning ko'pi  tizimlashmagan ya'ni shunchaki ro'yhatdan o'tib do'kon ochib telegram bot bog'lash va chat id orqali adminga habar boradigan loyiha kam va qimmat meni loyiham huddi shularni o'z bo'yniga oladi va dastur shunday ishlaydiki faqat o'zini egasini shop product va orderlarini ko'ra oladi
+Hozirgi kunda juda ko'p do'konlar bor  lekin ularning ko'pi  tizimlashmagan ya'ni shunchaki ro'yhatdan o'tib do'kon ochib telegram bot bog'lash va chat id orqali adminga habar boradigan loyiha juda kam va qimmat turadi meni loyiham huddi shularni o'z bo'yniga oladi va dastur shunday ishlaydiki faqat o'zini egasini shop product va orderlarini ko'ra oladi
 
 Tehnologiyalar:
 Python dasturlash tili, Django framewroki , DRF, .env, APi swagger,Rabbitmq, Redis, Celery, Djoser, Docker, Docker-compose,Ci-CD, Postgresql, JWT autenetifikatsiya, Django filter-search-pagination, Testlar, sql so'rovlar 
